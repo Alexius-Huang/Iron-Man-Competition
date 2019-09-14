@@ -390,3 +390,32 @@ type Vehicle = [string, string, string, Date];
 
 // 完全對前三個同為 `string` 型別的值對調，儘管意義上錯誤，但 TS 還是不鳥你 ~
 let WTFVehicle: Vehicle = ['taxi', 'yellow', 'Toyota', new Date(2019, 6, 12)];
+
+
+
+
+
+/* ------------------------------- Day 07 ----------------------------------- */
+
+enum WeekDay {
+  Sunday,
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday
+};
+
+// 語法錯誤！
+// enum WeekDay = { Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday };
+
+let weekDayOfBirthday = WeekDay.Monday;
+
+let TGIF: WeekDay = WeekDay.Friday;
+console.log(TGIF);
+// 結果為 5
+
+let valueOfTGIF = WeekDay[TGIF];
+console.log(valueOfTGIF);
+// 結果為 Friday
