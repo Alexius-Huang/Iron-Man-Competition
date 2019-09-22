@@ -639,3 +639,239 @@ CircleGeometryV2.staticPI;
 
 // 因為是 readonly，所以會被 TypeScript 提醒喔
 // CircleGeometryV2.staticPI = 3.1415926;
+
+
+
+
+
+
+
+
+/* ------------------------------- Day 23 ----------------------------------- */
+
+class Sorter {
+  // 使用者建立一個 Sorter 需要代入一個清單式的目標
+  // 這裡我們先用 number[] 作為輸入
+  // private 模式下防止使用者竄改
+  constructor (private input: number[]) {}
+
+  // 將使用者代入的清單式的值經由 Getter 設為唯讀模式
+  get values() { return this.input; }
+
+  // 提取代入清單狀資料的長度
+  get length() { return this.input.length; }
+
+  // 使用泡泡排序法 Bubble Sort
+  public sort() {
+    for (let i = 0; i < this.length; i += 1) {
+      for (let j = 0; j < this.length - i - 1; j += 1) {
+        // 1. 比較的過程：若左邊的元素值大於右邊元素值
+        if (this.input[j] > this.input[j + 1]) {
+          // 2. 元素互換的過程：將兩個元素進行交換
+          const cache = this.input[j];
+          this.input[j] = this.input[j + 1];
+          this.input[j + 1] = cache;
+        }
+      }
+    }
+  }
+}
+
+// const numbers = [3, 0, 2, -4, 1];
+// const sortNumbers = new Sorter(numbers);
+
+// // 經過排序前：
+// console.log(`Before sorted: ${sortNumbers.values.join(', ')}`);
+
+// sortNumbers.sort();
+
+// // 經過排序後：
+// console.log(`After sorted: ${sortNumbers.values.join(', ')}`);
+
+class SorterV2 {
+  // 這裡我們用 number[] | string 作為輸入
+  constructor (private input: number[] | string) {}
+
+  get values() { return this.input; }
+
+  get length() { return this.input.length; }
+
+  // 使用泡泡排序法 Bubble Sort
+  public sort() {
+    for (let i = 0; i < this.length; i += 1) {
+      for (let j = 0; j < this.length - i - 1; j += 1) {
+        // 使用 Type Guard 限縮 this.input 為陣列型別
+        if (this.input instanceof Array) {
+          // 1. 比較的過程：若左邊的元素值大於右邊元素值
+          if (this.input[j] > this.input[j + 1]) {
+            // 2. 元素互換的過程：將兩個元素進行交換
+            const cache = this.input[i];
+            this.input[j] = this.input[j + 1];
+            this.input[j + 1] = cache;
+          }
+        }
+        
+        // 使用 Type Guard 限縮 this.input 為字串型別
+        else if (typeof this.input === 'string') {
+          // 1. 比較的過程：若左邊的 character code 比右邊大
+          if (this.input[j] > this.input[j + 1]) {
+            // 2. 元素互換的過程：將兩個字母進行交換
+            const chars = this.input.split('');
+            const cacheChar = chars[j];
+            chars[j] = chars[j + 1];
+            chars[j + 1] = cacheChar;
+            this.input = chars.join('');
+          }
+        }
+      }
+    }
+  }
+}
+
+// const characters = 'helloworld';
+// const sortCharacters = new SorterV2(characters);
+
+// // 經過排序前：
+// console.log(`Before sorted: ${sortCharacters.values}`);
+
+// sortCharacters.sort();
+
+// // 經過排序後：
+// console.log(`After sorted: ${sortCharacters.values}`);
+
+class SorterV3 {
+  // 使用者建立一個 Sorter 需要代入一個清單式的目標
+  constructor (private input: number[]) {}
+
+  get values() { return this.input; }
+
+  get length() { return this.input.length; }
+  
+  public compare(index1: number, index2: number) {
+    return this.input[index1] > this.input[index2];
+  }
+
+  public swap(index1: number, index2: number) {
+    const cacheEl = this.input[index1];
+    this.input[index1] = this.input[index2];
+    this.input[index2] = cacheEl;
+  }
+
+  // 使用泡泡排序法 Bubble Sort
+  public sort() {
+    for (let i = 0; i < this.length; i += 1) {
+      for (let j = 0; j < this.length - i - 1; j += 1) {
+        // 1. 比較的過程：若左邊的元素值大於右邊元素值
+        if (this.compare(j, j + 1)) {
+          // 2. 元素互換的過程：將兩個元素進行交換
+          this.swap(j, j + 1);
+        }
+      }
+    }
+  }
+}
+
+
+/* 使用抽象類別 */
+interface Sortable {
+  values: unknown;
+  at(index: number): unknown;
+  length: number;
+}
+
+abstract class AbstractSorter {
+  // 我們預設子類別就已經有 length 取值方法被實踐出來
+  abstract get length(): number;
+
+  // 我們預設子類別就已經有 compare 方法被實踐出來
+  abstract compare(index1: number, index2: number): boolean;
+
+  // 我們預設子類別就已經有 swap 方法被實踐出來
+  abstract swap(index1: number, index2: number): void;
+
+  // 使用泡泡排序法 Bubble Sort
+  public sort() {
+    for (let i = 0; i < this.length; i += 1) {
+      for (let j = 0; j < this.length - i - 1; j += 1) {
+        // 1. 比較的過程：若左邊的元素值大於右邊元素值
+        if (this.compare(j, j + 1)) {
+          // 2. 元素互換的過程：將兩個元素進行交換
+          this.swap(j, j + 1);
+        }
+      }
+    }
+  }
+}
+
+class NumberSeries extends AbstractSorter {
+  constructor(private input: number[]) {
+    // 每次被繼承一定要呼叫父類別的建構子，但由於父類別
+    // 建構子不需要任何參數了，所以參數為空
+    super();
+  }
+
+  get values() { return this.input; }
+
+  // 根據父類別的 abstract get length 格式進行實踐
+  get length() { return this.input.length; }
+
+  // 根據父類別的 abstract compare 函式的格式進行實踐
+  public compare(index1: number, index2: number): boolean {
+    return this.input[index1] > this.input[index2];
+  }
+
+  // 根據父類別的 abstract swap 函式的格式進行實踐
+  public swap(index1: number, index2: number): void {
+    const cacheNumber = this.input[index1];
+    this.input[index1] = this.input[index2];
+    this.input[index2] = cacheNumber;
+  }
+}
+
+// const numbersV2 = [3, -2, 4, -6, 1];
+// const numberSeries = new NumberSeries(numbersV2);
+
+// // 排序前的結果
+// console.log(`Before Sort: ${numberSeries.values.join(', ')}`);
+
+// numberSeries.sort();
+
+// // 排序後的結果
+// console.log(`After Sort: ${numberSeries.values.join(', ')}`);
+
+class CharacterSeries extends AbstractSorter {
+  constructor(private input: string) {
+    super();
+  }
+
+  get values() { return this.input; }
+
+  // 根據父類別的 abstract get length 格式進行實踐
+  get length() { return this.input.length; }
+
+  // 根據父類別的 abstract compare 函式的格式進行實踐
+  public compare(index1: number, index2: number): boolean {
+    return this.input[index1] > this.input[index2];
+  }
+
+  // 根據父類別的 abstract swap 函式的格式進行實踐
+  public swap(index1: number, index2: number): void {
+    const chars = this.input.split('');
+    const cacheChar = chars[index1];
+    chars[index1] = chars[index2];
+    chars[index2] = cacheChar;
+    this.input = chars.join('');
+  }
+}
+
+// const charsV2 = 'helloworld';
+// const charSeries = new CharacterSeries(charsV2);
+
+// // 排序前的結果
+// console.log(`Before Sort: ${charSeries.values}`);
+
+// charSeries.sort();
+
+// // 排序後的結果
+// console.log(`After Sort: ${charSeries.values}`);
+
