@@ -190,14 +190,14 @@ interface I3 { a: string;             c: string;  }
 // I1 和 I2 同時有 b 屬性且對應型別相同 => STRIKE！
 interface I12 extends I1, I2 {}
 
-// I1 和 I2 同時有 b 屬性且對應型別相同 => BALL！
-// interface I23 extends I2, I3 {}
+// I2 和 I3 同時有 c 屬性但對應型別不同 => BALL！
+interface I23 extends I2, I3 {}
 
 // I1 和 I3 同時有 a 屬性且對應型別相同 => STRIKE！
 interface I13 extends I1, I3 {}
 
 // 想當然三種型別因為 I2, I3 關係而造成衝突 => BALL！
-// interface I123 extends I1, I2, I3 {}
+interface I123 extends I1, I2, I3 {}
 
 
 /* 函式之參數可以接受各種至少符合介面的格式 */
