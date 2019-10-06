@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>3rd Party Package & TypeScript Definition Files</title>
+
+  <!-- 將 RequireJS 與 Compile 過後的 AMD 檔案 Import 進去 -->
+  <script src="./require.js"></script>
+  <script src="./index.js"></script>
+
+  <script>
+    // RequireJS 設定，記得必須指定 jquery 的路徑
+    requirejs.config({
+      paths: {
+        'jquery': './node_modules/jquery/dist/jquery.min',
+      }
+    });
+
+    // 執行 index.js
+    require(['index']);
+  </script>
+</head>
+<body>
+  <button id="main-btn">Click Me!</button>
+
+  <p>You've clicked <span id="count">0</span> times!</p>
+</body>
+</html>
