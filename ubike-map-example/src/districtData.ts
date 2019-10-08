@@ -1,5 +1,5 @@
 // ./src/districtData.ts
-import { LatLngExpression } from "leaflet";
+import { LatLngExpression } from 'leaflet';
 import { Districts } from './data';
 
 export const districts: Districts[] = [

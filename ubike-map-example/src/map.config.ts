@@ -2,7 +2,7 @@
 import { LatLngExpression } from "leaflet";
 
 // 使用型別化名
-type MapConfig = {
+export type MapConfig = {
   coordinate: LatLngExpression;
   zoomLevel: number;
   tileLayerURL: string;
