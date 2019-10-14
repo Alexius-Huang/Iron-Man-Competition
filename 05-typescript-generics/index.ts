@@ -260,3 +260,12 @@ traverseElements<number>(
     console.log(`Index ${index} - Value ${el}`);
   }
 );
+
+
+
+
+
+
+
+/* ------------------------------- Day 44 ----------------------------------- */
+// 請看 linked-list 內部資料夾
